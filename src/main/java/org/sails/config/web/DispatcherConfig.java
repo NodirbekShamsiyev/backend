@@ -57,6 +57,6 @@ public class DispatcherConfig extends WebMvcConfigurerAdapter implements Applica
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/sails-client/**").addResourceLocations("classpath:/META-INF/resources/sails/client/");
+        registry.addResourceHandler("/sails-client/**").addResourceLocations("classpath:sails/client/");
     }
 }
