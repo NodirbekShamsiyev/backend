@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>sails-client</title>
+    <style type="text/css">
+        .red {
+            background-color: red;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <button @click="changeSomeData('red')">Change color to red</button>
+    <button @click="changeSomeData('blue')">Change color to blue</button>
+    <label>
+        <input type="text" v-model="cssData">
+    </label>
+    <p :class="cssData">Class {{ cssData }}</p>
+    <p>Changed time (debounce example){{number}}</p>
+
+    Hello <span th:text="${recipient}">Peter</span>!!!
+
+</div>
+<script th:src="@{/sails-client/}+${@buildJSFiles.getMainJS()}"></script>
+</body>
+</html>
