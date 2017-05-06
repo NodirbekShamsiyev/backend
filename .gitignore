@@ -185,3 +185,6 @@ local.properties
 .scala_dependencies
 .worksheet
 
+.idea/
+target/
+webapp.iml
