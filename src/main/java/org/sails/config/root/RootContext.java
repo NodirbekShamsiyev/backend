@@ -20,7 +20,6 @@ public class RootContext {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return new Gson().fromJson(jsFilesJSON, JSFiles.class);
     }
 
