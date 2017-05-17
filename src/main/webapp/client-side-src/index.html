@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>sails-client</title>
+    <style type="text/css">
+        .red {
+            background-color: red;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <button @click="changeSomeData('red')">Change color to red</button>
+    <button @click="changeSomeData('blue')">Change color to blue</button>
+    <label>
+        <input type="text" v-model="cssData">
+    </label>
+    <p :class="cssData">Class {{ cssData }}</p>
+    <p>Changed time (debounce example){{number}}</p>
+</div>
+<script src="/dist/build.js"></script>
+</body>
+</html>
