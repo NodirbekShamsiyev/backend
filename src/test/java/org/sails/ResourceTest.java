@@ -43,4 +43,10 @@ public class ResourceTest {
         }
 
     }
+
+
+    @Test
+    public void testPath(){
+        System.out.println(System.getProperty("user.dir"));
+    }
 }

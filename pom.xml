@@ -15,7 +15,6 @@
         <client.src.path.relative>src/main/webapp/client-side-src/</client.src.path.relative>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
         <jstl.version>1.2</jstl.version>
         <junit.version>4.12</junit.version>
         <log4j2.version>2.8.2</log4j2.version>
@@ -59,7 +58,6 @@
             <version>${cglib.version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -100,11 +98,11 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>org.sails</groupId>
-            <artifactId>vue-client</artifactId>
-            <version>0.0.1</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.sails</groupId>-->
+            <!--<artifactId>vue-client</artifactId>-->
+            <!--<version>0.0.1</version>-->
+        <!--</dependency>-->
 
     </dependencies>
 
@@ -181,7 +179,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.outputDirectory}/sails/client/</outputDirectory>
+                            <outputDirectory>${project.build.outputDirectory}/client/resources/</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>${client.src.path}/dist</directory>

@@ -18,11 +18,7 @@ public class SchedulerTest {
     public void testScheduler() throws Throwable {
         final Waiter waiter = new Waiter();
         ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
-        service.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                System.out.println("/----------------------Periodic schedule----------------------\\");
-            }
-        }, 5, 5, TimeUnit.SECONDS);
+        service.scheduleAtFixedRate(() -> System.out.println("/----------------------Periodic schedule----------------------\\"), 5, 5, TimeUnit.SECONDS);
 
         //   while (true);
         waiter.await(20000);

@@ -16,7 +16,7 @@ public class RootContext {
     JSFiles getBuildJSFilesNames() {
         String jsFilesJSON = null;
         try {
-            jsFilesJSON = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("sails/client/files-manifest.json"), "UTF-8");
+            jsFilesJSON = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("client/resources/files-manifest.json"), "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
         }
