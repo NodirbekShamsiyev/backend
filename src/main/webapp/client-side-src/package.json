@@ -11,8 +11,10 @@
   "dependencies": {
     "axios": "^0.16.1",
     "es6-promise": "^4.1.0",
+    "firebase": "^4.3.1",
     "lodash": "^4.17.4",
     "vue": "^2.2.1",
+    "vue-js-modal": "^1.2.11",
     "webpack-manifest-plugin": "^1.1.0"
   },
   "devDependencies": {
@@ -23,6 +25,7 @@
     "cross-env": "^3.0.0",
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",
+    "html-webpack-plugin": "^2.30.1",
     "vue-loader": "^11.1.4",
     "vue-template-compiler": "^2.2.1",
     "webpack": "^2.2.0",

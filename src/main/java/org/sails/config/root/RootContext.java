@@ -1,16 +1,31 @@
 package org.sails.config.root;
 
+import com.firebase.client.Firebase;
 import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
 
+import javax.inject.Inject;
 import java.io.IOException;
 
 @Configuration
-@ComponentScan(excludeFilters = {@ComponentScan.Filter(org.springframework.stereotype.Controller.class)})
+@Import({DataSource.class})
+@PropertySource({
+        "classpath:config.properties"
+})
+@ComponentScan( basePackages = "org.sails.*", excludeFilters = {@ComponentScan.Filter(org.springframework.stereotype.Controller.class)})
 public class RootContext {
+
+    private Environment env;
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
 
     @Bean("buildJSFiles")
     JSFiles getBuildJSFilesNames() {
@@ -23,4 +38,12 @@ public class RootContext {
         return new Gson().fromJson(jsFilesJSON, JSFiles.class);
     }
 
+    Firebase getFireBase(){
+        return new Firebase("/localhost");
+    }
+
+    @Inject
+    public Environment getEnv() {
+        return env;
+    }
 }

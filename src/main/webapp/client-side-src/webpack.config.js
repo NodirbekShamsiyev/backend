@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: './src/main.js',
@@ -75,7 +76,12 @@ if (process.env.NODE_ENV === 'production') {
             'build'
         ]),
         new ManifestPlugin({
-            fileName:'files-manifest.json'
+            fileName: 'files-manifest.json'
+        }),
+        new HtmlWebpackPlugin({
+            title: 'Test APP',
+            template: 'index.html',
+            //filename: 'index.html',
         })
     ])
 }

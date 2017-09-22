@@ -18,9 +18,6 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
-/**
- * Thymeleaf and Spring MVC configuration.
- */
 @Configuration
 @EnableWebMvc
 @ComponentScan("org.sails.controller")
@@ -59,6 +56,9 @@ public class DispatcherConfig extends WebMvcConfigurerAdapter implements Applica
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/sails-client/**").addResourceLocations("classpath:client/resources/");
+        registry.addResourceHandler("/sails-client/**").addResourceLocations("classpath:client/resources/").setCachePeriod(3600).resourceChain(true);
+        registry.addResourceHandler("/web-resources/**").addResourceLocations("/");
+
     }
+
 }
