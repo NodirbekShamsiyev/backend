@@ -1,9 +1,17 @@
 import 'es6-promise/auto';
 import Vue from 'vue'
 import * as _ from "lodash";
-import axios from "axios";
-import * as firebase from "firebase";
-import VModal from 'vue-js-modal'
+// import axios from "axios";
+// import * as firebase from "firebase";
+
+import {Firebase} from './util/FirebaseUtils'
+
+import VModal from 'vue-js-modal';
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
+import VueRouter from 'vue-router';
+import SignIn from './components/SignIn.vue';
+import SignUp from './components/SignUp.vue';
+
 // import Vuetify from 'vuetify';
 /*import App from './App.vue'
 
@@ -13,53 +21,62 @@ import VModal from 'vue-js-modal'
  });
  */
 
-const emailRE = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const config = {
-    apiKey: "AIzaSyD1Gw56VX47nQbUdTAEjidFivEKkRVhNgI",
-    authDomain: "it-convergence-d39b2.firebaseapp.com",
-    databaseURL: "https://it-convergence-d39b2.firebaseio.com",
-    projectId: "it-convergence-d39b2",
-    storageBucket: "it-convergence-d39b2.appspot.com",
-    messagingSenderId: "503178303321"
-};
-
-firebase.initializeApp(config);
-const fireAuth = firebase.auth();
+const fireAuth = Firebase.auth();
 
 //app instance
 Vue.use(VModal, {dialog: true});
+Vue.use(VueRouter);
+
+const router = new VueRouter({
+    routes: [{
+        path: '/login',
+        component: SignIn
+    }, {
+        path: '/registration',
+        component: SignUp
+    }]
+});
+
 const mainApp = new Vue({
+    components: {
+        PulseLoader
+    },
+    router,
     el: '#app',
     data: {
         number: 0,
         cssData: '',
-        signUp: {
-            email: '',
-            password: '',
-            rePassword: '',
-            name: '',
-            lastName: ''
-        },
-        signIn: {
-            email: '',
-            password: ''
+        // signUp: {
+        //     email: '',
+        //     password: '',
+        //     rePassword: '',
+        //     name: '',
+        //     lastName: ''
+        // },
+        spinner: {
+            color: '#3AB982',
+            size: '50px',
+            margin: '2px',
+            radius: '100%',
+            loading: false
         }
     },
 
-    computed: {
-        validation: function () {
-            return {
-                email: emailRE.test(this.signUp.email),
-                password: this.signUp.password,
-                emailSelf: this.signUp.email
-            }
-        },
-    },
+    // computed: {
+    //     validation: function () {
+    //         return {
+    //             email: emailRE.test(this.signUp.email),
+    //             password: this.signUp.password,
+    //             emailSelf: this.signUp.email
+    //         }
+    //     },
+    // },
 
     methods: {
         changeSomeData: function (color) {
             this.cssData = color;
+            this.spinner.loading = !this.spinner.loading;
             // axios.get();
         },
 
@@ -67,65 +84,17 @@ const mainApp = new Vue({
             this.number++;
         }, 1000),
 
-        registerUser: function () {
-            let displayName = '' + this.signUp.name + ' ' + this.signUp.lastName;
-            if (this.validation.email && this.validation.password) {
-                fireAuth.createUserWithEmailAndPassword(this.validation.emailSelf, this.validation.password)
-                    .then((user) => {
-                        user.updateProfile({
-                            displayName: displayName,
-                            photoURL: ''
-                        }).then(() => {
-                            fireAuth.currentUser.reload().then(() => {
-                                fireAuth.currentUser.sendEmailVerification().then(() => {//send verification email
-                                    alert("Please verify your email");
-                                    fireAuth.signOut().catch((error) => {
-                                        console.log(error);
-                                    })
-                                }, (error) => {
-                                    console.log(error);
-                                });
-                            })
-                        })
-                    }, (error) => {
-                        console.log(error);
-                    })
-            }
+        beforeOpen: function () {
+            console.log("open")
         },
-
-        login: function () {
-            fireAuth.signInWithEmailAndPassword(this.signIn.email, this.signIn.password)
-                .then((user) => {
-                    if (!user.emailVerified) {
-                        //-------------dialog-------------//
-                        this.$modal.show('dialog', {
-                            title: 'Alert!',
-                            text: 'Please verify your email',
-                            buttons: [{
-                                title: 'Send verification email',
-                                handler: () => {
-                                    user.sendEmailVerification().then(() => {//resend verification email
-                                        alert("Email sent");
-                                        fireAuth.signOut().then(() => {
-                                            this.$modal.hide('dialog');
-                                        })
-                                    }, (error) => {
-                                        console.log(error);
-                                    });
-                                }
-                            }, {title: 'Close'}]
-                        });
-                        //-------------dialog-------------//
-                    }
-                }, (error) => {
-                    console.log(error);
-                })
-        }
-
+        beforeClose: function () {
+            console.log("close")
+        },
     },
 
     watch: {
-        cssData: function (lastChange) {
+        // cssData: function (lastChange) {
+        cssData: function () {
             this.changeNumber();
         },
         // 'signUp.email' :function () {
@@ -136,4 +105,13 @@ const mainApp = new Vue({
 
 fireAuth.onAuthStateChanged(function (user) {
     console.log(user);
+    // if (user && !user.emailVerified) {
+    //     mainApp.$modal.show('dialog', {
+    //         text: 'Please verify your email',
+    //         buttons: [{title: 'Close'}]
+    //     });
+    // }
+    // fireAuth.signOut().catch(error => {
+    //     console.log(error);
+    // })
 });
