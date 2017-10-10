@@ -72,7 +72,7 @@
                         } else {
                             //route to main window
                         }
-                    }, (error) => {
+                    }, () => {
                         this.spinner.loading = false;
                     })
             }
@@ -80,12 +80,6 @@
     }
 </script>
 <style>
-    /*body {*/
-    /*padding-top: 40px;*/
-    /*padding-bottom: 40px;*/
-    /*background-color: #eee;*/
-    /*}*/
-
     .form-signin {
         max-width: 330px;
         padding: 15px;

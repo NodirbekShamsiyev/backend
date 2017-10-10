@@ -2,94 +2,92 @@ import 'es6-promise/auto';
 import Vue from 'vue'
 import * as _ from "lodash";
 // import axios from "axios";
-// import * as firebase from "firebase";
-
 import {Firebase} from './util/FirebaseUtils'
-
 import VModal from 'vue-js-modal';
-import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import VueRouter from 'vue-router';
+import InstantSearch from 'vue-instantsearch';
+
 import SignIn from './components/SignIn.vue';
 import SignUp from './components/SignUp.vue';
-
-// import Vuetify from 'vuetify';
-/*import App from './App.vue'
-
- new Vue({
- el: '#app',
- render: h => h(App)
- });
- */
-
+import Search from './components/util/Search.vue';
+import Book from './components/Book.vue';
+import Spinner from './components/util/Spinner.vue';
+import AddBook from './components/AddBook.vue';
 
 const fireAuth = Firebase.auth();
-
-//app instance
 Vue.use(VModal, {dialog: true});
 Vue.use(VueRouter);
+Vue.use(InstantSearch);
 
 const router = new VueRouter({
+    saveScrollPosition: true,
+    history: true,
     routes: [{
         path: '/login',
-        component: SignIn
+        component: SignIn,
     }, {
         path: '/registration',
         component: SignUp
+    }, {
+        path: '/addBook',
+        component: AddBook
+    }, {
+        path: '/book/:id', props: true,
+        component: Book,
+        beforeEnter: (to, from, next) => {
+            console.log(to);
+            console.log(from);
+            next();
+        }
     }]
 });
 
+Vue.prototype.$fireDB = Firebase.database();
+
 const mainApp = new Vue({
     components: {
-        PulseLoader
+        'search-panel': Search,
+        Spinner
     },
     router,
     el: '#app',
     data: {
         number: 0,
         cssData: '',
-        // signUp: {
-        //     email: '',
-        //     password: '',
-        //     rePassword: '',
-        //     name: '',
-        //     lastName: ''
-        // },
+        auth: {
+            user: null
+        },
         spinner: {
-            color: '#3AB982',
-            size: '50px',
-            margin: '2px',
-            radius: '100%',
-            loading: false
+            loading: false,
+        },
+    },
+
+    computed: {
+        isLogged: function () {
+            return this.auth.user ? this.auth.user.emailVerified : false;
         }
     },
 
-    // computed: {
-    //     validation: function () {
-    //         return {
-    //             email: emailRE.test(this.signUp.email),
-    //             password: this.signUp.password,
-    //             emailSelf: this.signUp.email
-    //         }
-    //     },
-    // },
-
     methods: {
+        signOut: function () {
+            fireAuth.signOut();
+        },
         changeSomeData: function (color) {
             this.cssData = color;
-            this.spinner.loading = !this.spinner.loading;
-            // axios.get();
+            this.userLogged = !this.userLogged;
         },
 
         changeNumber: _.debounce(function () {
             this.number++;
         }, 1000),
 
-        beforeOpen: function () {
-            console.log("open")
-        },
-        beforeClose: function () {
-            console.log("close")
-        },
+        onBook: function (book) {
+            // this.spinner.loading = true;
+            console.log('$on parent ===>');
+            console.log(book);
+            //load the data
+        }
+
     },
 
     watch: {
@@ -105,13 +103,5 @@ const mainApp = new Vue({
 
 fireAuth.onAuthStateChanged(function (user) {
     console.log(user);
-    // if (user && !user.emailVerified) {
-    //     mainApp.$modal.show('dialog', {
-    //         text: 'Please verify your email',
-    //         buttons: [{title: 'Close'}]
-    //     });
-    // }
-    // fireAuth.signOut().catch(error => {
-    //     console.log(error);
-    // })
+    Vue.set(mainApp.auth, 'user', user);
 });
