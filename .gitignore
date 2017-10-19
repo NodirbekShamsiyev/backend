@@ -187,3 +187,5 @@ local.properties
 .idea/
 target/
 *.iml
+/src/main/webapp/client-side-src/src/util/AlgoliaUtil.js
+/src/main/webapp/client-side-src/src/util/FirebaseUtils.js
