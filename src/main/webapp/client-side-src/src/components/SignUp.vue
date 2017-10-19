@@ -53,10 +53,8 @@
 </template>
 <script>
     import Spinner from './util/Spinner.vue'
-    import {Firebase} from '../util/FirebaseUtils'
     import VModal from 'vue-js-modal';
 
-    const fireAuth = Firebase.auth();
     const emailRE = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     export default {
@@ -82,7 +80,7 @@
             registerUser: function () {
                 if (this.validation.email && this.validation.password) {
                     this.spinner.loading = true;
-                    fireAuth.createUserWithEmailAndPassword(this.validation.emailSelf, this.validation.password)
+                    this.$fireAuth.createUserWithEmailAndPassword(this.validation.emailSelf, this.validation.password)
                         .then((user) => {
                             Promise.all([
                                 user.updateProfile({
@@ -91,7 +89,7 @@
                                 }),
                                 user.sendEmailVerification()]
                             ).then(() => {
-                                fireAuth.signOut();
+                                this.$fireAuth.signOut();
                                 this.spinner.loading = false;
                                 this.$modal.show('dialog', {
                                     text: 'Please verify your email.Email was sent.'

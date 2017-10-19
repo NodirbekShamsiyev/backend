@@ -22,7 +22,7 @@
             <ais-results v-show="searchStore.query.length > 0">
                 <template scope="{ result }">
                     <div v-on:click="searchResultClick(result)" class="found-item">
-                        <a> <span>{{ result.title }}</span> <span>{{ result.author }}</span><span>{{ result.subtitle }}</span></a><br/>
+                        <a> <span>{{ result.title }}</span> <span>{{ result.author }}</span></a><br/>
                     </div>
                 </template>
             </ais-results>
@@ -32,9 +32,7 @@
 </template>
 
 <script>
-    import {createFromAlgoliaCredentials} from 'vue-instantsearch';
-
-    const searchStore = createFromAlgoliaCredentials('TY70EG43AB', 'ad50754214a919e6c5a9b352dbaac6d8');
+    import {searchStore} from '../../util/AlgoliaUtil';
 
     export default {
         data() {

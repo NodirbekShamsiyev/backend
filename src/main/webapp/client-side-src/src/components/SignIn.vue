@@ -17,10 +17,8 @@
 </template>
 <script>
     import Spinner from './util/Spinner.vue'
-    import {Firebase} from '../util/FirebaseUtils'
     import VModal from 'vue-js-modal';
 
-    const fireAuth = Firebase.auth();
     export default {
         data() {
             return {
@@ -41,7 +39,7 @@
         methods: {
             login: function () {
                 this.spinner.loading = true;
-                fireAuth.signInWithEmailAndPassword(this.signIn.email, this.signIn.password)
+                this.$fireAuth.signInWithEmailAndPassword(this.signIn.email, this.signIn.password)
                     .then((user) => {
                         this.spinner.loading = false;
                         if (!user.emailVerified) {
@@ -57,7 +55,7 @@
                                         Promise.all([
                                             user.sendEmailVerification()
                                                 .then(() => {
-                                                    fireAuth.signOut()
+                                                    this.$fireAuth.signOut()
                                                 }),
                                         ]).then(() => {
                                             this.spinner.loading = false;

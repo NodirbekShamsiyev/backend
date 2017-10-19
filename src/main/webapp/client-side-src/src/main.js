@@ -13,11 +13,15 @@ import Search from './components/util/Search.vue';
 import Book from './components/Book.vue';
 import Spinner from './components/util/Spinner.vue';
 import AddBook from './components/AddBook.vue';
+import algoliasearch from 'algoliasearch';
 
 const fireAuth = Firebase.auth();
 Vue.use(VModal, {dialog: true});
 Vue.use(VueRouter);
 Vue.use(InstantSearch);
+
+Vue.prototype.$fireDB = Firebase.database();
+Vue.prototype.$fireAuth = fireAuth;
 
 const router = new VueRouter({
     saveScrollPosition: true,
@@ -41,8 +45,6 @@ const router = new VueRouter({
         }
     }]
 });
-
-Vue.prototype.$fireDB = Firebase.database();
 
 const mainApp = new Vue({
     components: {
@@ -70,7 +72,7 @@ const mainApp = new Vue({
 
     methods: {
         signOut: function () {
-            fireAuth.signOut();
+            this.$fireAuth.signOut();
         },
         changeSomeData: function (color) {
             this.cssData = color;

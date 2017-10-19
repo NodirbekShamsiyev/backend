@@ -57,7 +57,7 @@
 
 <script>
     import Spinner from './util/Spinner.vue'
-    import {Firebase} from '../util/FirebaseUtils'
+    import {adminIndex} from '../util/AlgoliaUtil'
 
     export default {
         components: {
@@ -65,12 +65,24 @@
         },
         methods: {
             addBook() {
-                console.log('saving book');
-                this.$fireDB.ref('book').push(this.book, () => {
-                    console.log('saved');
-                })
+                let bookRef = this.$fireDB.ref('book').push(this.book);
+                bookRef.once('value').then(snapshot => {
+                    let val = snapshot.val();
+                    console.log(val);
+                    adminIndex.addObject({
+                        isbn: val.isbn,
+                        title: val.title,
+                        subtitle: val.subtitle,
+                        author: val.author,
+                        publisher: val.publisher,
+                        firebaseID: snapshot.key
+                    }, (error, content) => {
+                        console.log(error);
+                    });
+                });
             }
         },
+
         data() {
             return {
                 book: {
