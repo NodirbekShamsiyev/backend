@@ -63,6 +63,7 @@
         components: {
             'spinner': Spinner
         },
+
         methods: {
             addBook() {
                 let bookRef = this.$fireDB.ref('book').push(this.book);

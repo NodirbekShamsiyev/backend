@@ -13,7 +13,6 @@ import Search from './components/util/Search.vue';
 import Book from './components/Book.vue';
 import Spinner from './components/util/Spinner.vue';
 import AddBook from './components/AddBook.vue';
-import algoliasearch from 'algoliasearch';
 
 const fireAuth = Firebase.auth();
 Vue.use(VModal, {dialog: true});
@@ -36,7 +35,7 @@ const router = new VueRouter({
         path: '/addBook',
         component: AddBook
     }, {
-        path: '/book/:id', props: true,
+        path: '/book/:id', props: true, name: 'book',
         component: Book,
         beforeEnter: (to, from, next) => {
             console.log(to);
@@ -71,9 +70,11 @@ const mainApp = new Vue({
     },
 
     methods: {
+
         signOut: function () {
             this.$fireAuth.signOut();
         },
+
         changeSomeData: function (color) {
             this.cssData = color;
             this.userLogged = !this.userLogged;
@@ -84,10 +85,7 @@ const mainApp = new Vue({
         }, 1000),
 
         onBook: function (book) {
-            // this.spinner.loading = true;
-            console.log('$on parent ===>');
-            console.log(book);
-            //load the data
+            router.push({path: `/book/${book.firebaseID}`});
         }
 
     },
