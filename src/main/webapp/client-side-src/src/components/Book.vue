@@ -12,11 +12,13 @@
             <div>Book {{ book }}</div>
         </div>
 
+        <div id="disqus_thread"></div>
     </div>
 </template>
 
 <script>
     import Spinner from './util/Spinner.vue'
+    import {DISQUS_CONFIG} from '../util/DISQUS';
 
     export default {
         props: {
@@ -27,7 +29,7 @@
         },
 
         components: {
-            'spinner': Spinner
+            'spinner': Spinner,
         },
 
         data() {
@@ -50,6 +52,45 @@
                 }, error => {
                     console.log(error);
                 });
+                this.loadComments();
+            },
+
+            initDisqus() {
+                const self = this;
+
+                const disqus_config = function () {
+                    this.page.identifier = 'http://goodbooks.com/book/#!' + self.id;
+                    this.page.url = 'http://goodbooks.com/book/#!' + self.id;
+                };
+                window.disqus_config = disqus_config;
+
+                setTimeout(() => {
+                    const d = document, s = d.createElement('script');
+                    s.src = 'https://' + DISQUS_CONFIG.shortName + '.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                }, 2000);
+
+            },
+
+            resetDisqus(disqus) {
+                const self = this;
+                disqus.reset({
+                    reload: true,
+                    config: function () {
+                        this.page.identifier = 'http://goodbooks.com/book/#!' + self.id;
+                        this.page.url = 'http://goodbooks.com/book/#!' + self.id;
+                    }
+                });
+            },
+
+            loadComments() {
+                if (window.DISQUS) {
+                    this.resetDisqus(window.DISQUS);
+                    console.log(window.DISQUS);
+                    return
+                }
+                this.initDisqus();
             }
         },
 
@@ -61,7 +102,9 @@
             '$route.params.id': function (id) {
                 this.id = id;
                 this.loadData(id);
-            }
-        }
+            },
+        },
+
+
     }
 </script>
