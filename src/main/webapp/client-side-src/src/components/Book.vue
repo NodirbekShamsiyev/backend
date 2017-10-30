@@ -47,8 +47,16 @@
                 console.log('Loading data with id =>' + id);
                 this.bookRef = this.$fireDB.ref('/book/' + id);
                 this.bookRef.once('value').then(snapshot => {
-                    this.book = snapshot.val();
+
                     this.dataLoading = false;
+
+                    if (!snapshot.exists()) {
+                        this.$router.push({path: `/404/${id}`});
+                        return;
+                    }
+
+                    this.book = snapshot.val();
+
                 }, error => {
                     console.log(error);
                 });
@@ -56,13 +64,13 @@
             },
 
             initDisqus() {
+
                 const self = this;
 
-                const disqus_config = function () {
+                window.disqus_config = function () {
                     this.page.identifier = 'http://goodbooks.com/book/#!' + self.id;
                     this.page.url = 'http://goodbooks.com/book/#!' + self.id;
                 };
-                window.disqus_config = disqus_config;
 
                 setTimeout(() => {
                     const d = document, s = d.createElement('script');

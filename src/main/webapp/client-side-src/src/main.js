@@ -13,6 +13,7 @@ import Search from './components/util/Search.vue';
 import Book from './components/Book.vue';
 import Spinner from './components/util/Spinner.vue';
 import AddBook from './components/AddBook.vue';
+import NotFound from './components/404.vue';
 
 const fireAuth = Firebase.auth();
 Vue.use(VModal, {dialog: true});
@@ -34,6 +35,8 @@ const router = new VueRouter({
     }, {
         path: '/addBook',
         component: AddBook
+    }, {
+        path: '/404/:id', component: NotFound, props: true
     }, {
         path: '/book/:id', props: true, name: 'book',
         component: Book,
