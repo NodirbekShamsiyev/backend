@@ -31,6 +31,9 @@
                     <li class="active"><a href="#">Home</a></li>
                     <li><a href="#">About</a></li>
                     <li><a href="#">Contact</a></li>
+                    <li v-if="isLogged">
+                        <router-link to="/addBook">Add book</router-link>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <template v-if="!isLogged">

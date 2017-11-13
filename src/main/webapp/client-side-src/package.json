@@ -17,8 +17,7 @@
     "vue": "^2.2.1",
     "vue-instantsearch": "^1.0.1",
     "vue-js-modal": "^1.2.11",
-    "webpack-manifest-plugin": "^1.1.0",
-    "vue-disqus": "latest"
+    "webpack-manifest-plugin": "^1.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

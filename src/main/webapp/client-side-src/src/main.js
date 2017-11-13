@@ -34,17 +34,23 @@ const router = new VueRouter({
         component: SignUp
     }, {
         path: '/addBook',
-        component: AddBook
+        component: AddBook,
+        beforeEnter: (to, from, next) => {
+            if (!fireAuth.currentUser) {
+                next({
+                    path: '/login'
+                });
+                return;
+            }
+            next();
+        }
     }, {
         path: '/404/:id', component: NotFound, props: true
     }, {
+        path: '/404', component: NotFound, props: true
+    }, {
         path: '/book/:id', props: true, name: 'book',
-        component: Book,
-        beforeEnter: (to, from, next) => {
-            console.log(to);
-            console.log(from);
-            next();
-        }
+        component: Book
     }]
 });
 
@@ -78,33 +84,13 @@ const mainApp = new Vue({
             this.$fireAuth.signOut();
         },
 
-        changeSomeData: function (color) {
-            this.cssData = color;
-            this.userLogged = !this.userLogged;
-        },
-
-        changeNumber: _.debounce(function () {
-            this.number++;
-        }, 1000),
-
         onBook: function (book) {
             router.push({path: `/book/${book.firebaseID}`});
         }
 
-    },
-
-    watch: {
-        // cssData: function (lastChange) {
-        cssData: function () {
-            this.changeNumber();
-        },
-        // 'signUp.email' :function () {
-        //     this.checkEmail();
-        // }
     }
 });
 
 fireAuth.onAuthStateChanged(function (user) {
-    console.log(user);
     Vue.set(mainApp.auth, 'user', user);
 });

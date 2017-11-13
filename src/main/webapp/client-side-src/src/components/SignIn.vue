@@ -42,6 +42,7 @@
                 this.$fireAuth.signInWithEmailAndPassword(this.signIn.email, this.signIn.password)
                     .then((user) => {
                         this.spinner.loading = false;
+
                         if (!user.emailVerified) {
                             //-------------dialog-------------//
                             this.$modal.hide('dialog');
@@ -67,9 +68,11 @@
                                 }, {title: 'Close'}]
                             });
                             //-------------dialog-------------//
-                        } else {
-                            //route to main window
+                            return;
                         }
+
+                        this.$router.push("/");
+
                     }, () => {
                         this.spinner.loading = false;
                     })

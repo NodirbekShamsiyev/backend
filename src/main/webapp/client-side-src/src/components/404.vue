@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="id">Requested resource with ID : {{id}} not found</div>
-        <div v-else>Requested resource not found</div>
+        <div v-else>Page not found</div>
     </div>
 </template>
 <script>
