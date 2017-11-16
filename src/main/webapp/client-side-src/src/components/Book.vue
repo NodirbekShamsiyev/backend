@@ -12,6 +12,10 @@
             <div>Book {{ book }}</div>
         </div>
 
+        <form>
+            <input v-model="message" type="text"/>
+        </form>
+
         <div id="disqus_thread"></div>
     </div>
 </template>
@@ -38,6 +42,7 @@
                 failed: false,
                 book: {},
                 bookRef: {},
+                message: ''
             }
         },
 
@@ -98,6 +103,9 @@
 
         mounted() {
             this.loadData(this.id);
+            setTimeout(() => {
+                this.message = "this message set through v-model two way binding";
+            }, 4500);
         },
 
         watch: {
@@ -105,6 +113,9 @@
                 this.id = id;
                 this.loadData(id);
             },
+            message: function (message) {
+                console.log('Data changed=>' + message);
+            }
         },
 
     }
