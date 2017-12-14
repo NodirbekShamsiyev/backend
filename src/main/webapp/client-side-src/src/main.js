@@ -1,8 +1,7 @@
 import 'es6-promise/auto';
 import Vue from 'vue'
-import * as _ from "lodash";
-// import axios from "axios";
 import {Firebase} from './util/FirebaseUtils'
+import firebaseAPI from './util/FirebaseUtils'
 import VModal from 'vue-js-modal';
 import VueRouter from 'vue-router';
 import InstantSearch from 'vue-instantsearch';
@@ -12,8 +11,9 @@ import SignUp from './components/SignUp.vue';
 import Search from './components/util/Search.vue';
 import Book from './components/Book.vue';
 import Spinner from './components/util/Spinner.vue';
-import AddBook from './components/AddBook.vue';
+import BookData from './components/BookData.vue';
 import NotFound from './components/404.vue';
+import Main from './components/Main.vue';
 
 const fireAuth = Firebase.auth();
 Vue.use(VModal, {dialog: true});
@@ -22,19 +22,35 @@ Vue.use(InstantSearch);
 
 Vue.prototype.$fireDB = Firebase.database();
 Vue.prototype.$fireAuth = fireAuth;
+Vue.prototype.$fireAPI = firebaseAPI;
 
 const router = new VueRouter({
     saveScrollPosition: true,
     history: true,
     routes: [{
+        path: '/',
+        component: Main,
+    }, {
         path: '/login',
         component: SignIn,
     }, {
         path: '/registration',
         component: SignUp
     }, {
-        path: '/addBook',
-        component: AddBook,
+        path: '/add',
+        component: BookData,
+        beforeEnter: (to, from, next) => {
+            if (!fireAuth.currentUser) {
+                next({
+                    path: '/login'
+                });
+                return;
+            }
+            next();
+        }
+    }, {
+        path: '/edit/:id',
+        component: BookData,
         beforeEnter: (to, from, next) => {
             if (!fireAuth.currentUser) {
                 next({
@@ -70,6 +86,7 @@ const mainApp = new Vue({
         spinner: {
             loading: false,
         },
+
     },
 
     computed: {
@@ -87,8 +104,8 @@ const mainApp = new Vue({
         onBook: function (book) {
             router.push({path: `/book/${book.firebaseID}`});
         }
+    },
 
-    }
 });
 
 fireAuth.onAuthStateChanged(function (user) {
