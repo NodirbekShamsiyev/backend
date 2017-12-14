@@ -9,12 +9,16 @@
 
         </div>
         <div v-else>
-            <div>Book {{ book }}</div>
+            <div class="card-body">
+                <h3 class="card-title">{{book.title}}</h3>
+                <h4>{{book.author}}</h4>
+                <p class="card-text">
+                    {{book.description}}
+                </p>
+                <span class="text-warning">★ ★ ★ ★ ☆</span>
+                4.0 stars
+            </div>
         </div>
-
-        <form>
-            <input v-model="message" type="text"/>
-        </form>
 
         <div id="disqus_thread"></div>
     </div>
@@ -42,7 +46,7 @@
                 failed: false,
                 book: {},
                 bookRef: {},
-                message: ''
+                bookFormatted: {}
             }
         },
 
@@ -60,7 +64,20 @@
                         return;
                     }
 
-                    this.book = snapshot.val();
+                    let bookData = snapshot.val();
+
+                    this.book = {
+                        isbn: bookData.isbn || 'no ISBN',
+                        title: bookData.title,
+                        subtitle: bookData.subtitle || 'no subtitle',
+                        author: bookData.author || 'no author',
+                        publisher: bookData.publisher || 'no publisher',
+                        description: bookData.description || 'no description',
+                        createdDate: bookData.createdDate,
+                        createdDateFormatted: new Date(bookData.createdDate).toISOString(),
+                        editedDate: bookData.editedDate,
+                        editedDateFormatted: new Date(bookData.editedDate).toISOString(),
+                    }
 
                 }, error => {
                     console.log(error);
@@ -80,7 +97,7 @@
                 setTimeout(() => {
                     const d = document, s = d.createElement('script');
                     s.src = 'https://' + DISQUS_CONFIG.shortName + '.disqus.com/embed.js';
-                    s.setAttribute('data-timestamp', +new Date());
+                    s.setAttribute('data-timestamp', new Date());
                     (d.head || d.body).appendChild(s);
                 }, 1500);
             },
@@ -103,9 +120,6 @@
 
         mounted() {
             this.loadData(this.id);
-            setTimeout(() => {
-                this.message = "this message set through v-model two way binding";
-            }, 4500);
         },
 
         watch: {

@@ -25,7 +25,6 @@
                 this.$fireDB.ref('book/').orderByChild('editedDate').limitToLast(5).once('value', snapshot => {
                     snapshot.forEach(child => {
                         let book = child.val();
-                        console.log(book.title);
                         recentData.push({
                             isbn: book.isbn || 'no ISBN',
                             title: book.title,
